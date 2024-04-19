@@ -84,8 +84,10 @@ void get_guessed_word(const char secret[], const char letters_guessed[], char gu
     for (int i = 0; i < strlen(secret); i++)
     {
         // setting letters
-
-        guessed_word[i] = '_';
+        if (guessed_word[i] == '_')
+        {
+            guessed_word[i] = '_';
+        }
     }
 
     for (int i = 0; i < strlen(secret); i++)

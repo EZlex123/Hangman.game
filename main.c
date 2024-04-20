@@ -21,5 +21,10 @@ int main()
     printf("%s\n", result);
     // result = "_o_tai_er"
 
+    char result1[30];
+    get_available_letters("arpstxgoieyu", result1);
+    printf("%s\n", result1);
+    // result = "bcdfhjklmnqvwz
+
     return 0;
 }

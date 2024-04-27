@@ -11,7 +11,6 @@
  */
 int is_word_guessed(const char secret[], const char letters_guessed[]);
 
-
 /**
  * Function returns string representing the guessed word
  * This string contains visible letters, which were guessed successfuly
@@ -23,7 +22,6 @@ int is_word_guessed(const char secret[], const char letters_guessed[]);
  */
 void get_guessed_word(const char secret[], const char letters_guessed[], char guessed_word[]);
 
-
 /**
  * Returns all letters, which were not used for guessing
  * Function returns set of lowercase letters sorted in alphabetical order. This
@@ -34,14 +32,12 @@ void get_guessed_word(const char secret[], const char letters_guessed[], char gu
  */
 void get_available_letters(const char letters_guessed[], char available_letters[]);
 
-
 /**
  * Starts interactive hangman game
  *
  * @param secret the secret word lowercase
  */
 void hangman(const char secret[]);
-
 
 /**
  * Returns the random word

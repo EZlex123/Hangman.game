@@ -105,6 +105,8 @@ void get_guessed_word(const char secret[], const char letters_guessed[], char gu
             }
         }
     }
+
+    guessed_word[strlen(secret)] = '\0';
 }
 
 void get_available_letters(const char letters_guessed[], char available_letters[])
@@ -134,7 +136,136 @@ void get_available_letters(const char letters_guessed[], char available_letters[
                 }
 
                 len--;
+                i--;
             }
         }
+    }
+
+    available_letters[len] = '\0';
+}
+
+int checkLetterInWord(const char secret[], const char letter)
+{
+
+    for (int i = 0; i < strlen(secret); i++)
+    {
+
+        if (secret[i] == letter)
+        {
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
+void hangman(const char secret[])
+{
+    int secretLen = strlen(secret);
+    int attempts = 8;
+    char available_letters[40] = "";
+    char letters_guessed[40] = "";
+    int letters_guessed_index = 0;
+    char guessed_word[40] = "";
+
+    int FindLetter = 0;
+
+    printf("Welcome to the game, Hangman!\n");
+    printf("I am thinking of a word that is %d letters long.\n", secretLen);
+    printf("-------------\n");
+
+    while (attempts > 0)
+    {
+        printf("You have %d guesses left.\n", attempts);
+        get_available_letters(letters_guessed, available_letters);
+        printf("Available letters: %s\n", available_letters);
+        printf("Please guess a letter: ");
+        char tmpInput[20];
+        fgets(tmpInput, 20, stdin);
+        if (strlen(tmpInput) - 1 == 1)
+        {
+            // is a symbol
+            if (tmpInput[0] >= 97 && tmpInput[0] <= 122)
+            { // lowercase
+
+                if (checkLetterInWord(letters_guessed, tmpInput[0]))
+                {
+                    FindLetter = 1;
+                    printf("Oops! You've already guessed that letter:");
+                }
+                else
+                {
+                    letters_guessed[letters_guessed_index] = tmpInput[0];
+                    letters_guessed_index++;
+                }
+            }
+
+            else if (tmpInput[0] >= 65 && tmpInput[0] <= 90)
+            { // uppercase => upper to lower
+
+                if (checkLetterInWord(letters_guessed, tmpInput[0]))
+                {
+                    FindLetter = 1;
+                    printf("Oops! You've already guessed that letter:");
+                }
+                else
+                {
+                    tmpInput[0] += 32;
+                    letters_guessed[letters_guessed_index] = tmpInput[0];
+                    letters_guessed_index++;
+                }
+            }
+
+            else
+            { // unknown symbol
+                printf("Oops! '%c' is not a valid letter: ", tmpInput[0]);
+            }
+
+            if (!FindLetter)
+            {
+                if (checkLetterInWord(secret, tmpInput[0]))
+                {
+                    printf("Good guess:");
+                }
+                else
+                {
+                    printf("Oops! That letter is not in my word:");
+                    attempts--;
+                }
+            }
+            FindLetter = 0;
+
+            get_guessed_word(secret, letters_guessed, guessed_word);
+
+            for (int i = 0; i < strlen(guessed_word); i++)
+            {
+                printf("%c ", guessed_word[i]);
+            }
+            printf("\n");
+            printf("-------------\n");
+
+            if (is_word_guessed(secret, letters_guessed))
+            {
+                printf("Congratulations, you won!\n");
+                break;
+            }
+        }
+        else
+        {
+            if (is_word_guessed(secret, tmpInput))
+            {
+                printf("Congratulations, you won!\n");
+                break;
+            }
+            else
+            {
+                printf("Sorry, bad guess. The word was %s.\n", secret);
+                break;
+            }
+        }
+    }
+    if (attempts == 0)
+    {
+        printf("Sorry, you ran out of guesses. The word was undeserved.\n");
     }
 }
